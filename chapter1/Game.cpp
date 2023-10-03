@@ -20,7 +20,7 @@ bool Game::Initialize() {
         SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
         return false;
     }
-    window = SDL_CreateWindow("Game", 1024, 768, 0);
+    window = SDL_CreateWindow("Game",100, 100, 1024, 768, 0);
     if (!window) {
         SDL_Log("Failed to create window: %s", SDL_GetError());
         return false;
@@ -50,7 +50,7 @@ void Game::ProcessInput() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
-        case SDL_EVENT_QUIT:
+        case SDL_QUIT:
             isRunning = false;
             break;
         default:
@@ -109,7 +109,7 @@ void Game::GenerateOutput() {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
 	SDL_RenderClear(renderer);
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-	SDL_FRect wall { 0, 0, 1024, thickness };
+	SDL_Rect wall { 0, 0, 1024, thickness };
 	SDL_RenderFillRect(renderer, &wall);
 	wall.y = 768 - thickness;
 	SDL_RenderFillRect(renderer, &wall);
@@ -118,16 +118,16 @@ void Game::GenerateOutput() {
 	wall.w = thickness;
 	wall.h = 1024;
 	SDL_RenderFillRect(renderer, &wall);
-	SDL_FRect paddle{
-		paddlePos.x,
-		paddlePos.y - paddleH / 2,
+	SDL_Rect paddle{
+		static_cast<int>(paddlePos.x),
+		static_cast<int>(paddlePos.y - paddleH / 2),
 		thickness,
-		paddleH
+		static_cast<int>(paddleH)
 	};
 	SDL_RenderFillRect(renderer, &paddle);
-	SDL_FRect ball{
-		ballPos.x - thickness / 2,
-		ballPos.y - thickness / 2,
+	SDL_Rect ball{
+		static_cast<int>(ballPos.x - thickness / 2),
+		static_cast<int>(ballPos.y - thickness / 2),
 		thickness,
 		thickness
 	};
