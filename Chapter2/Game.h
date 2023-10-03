@@ -7,9 +7,13 @@ class Game {
 	Uint32 ticksCount;
 	bool isRunning;
 public:
-	Game() = default;
+	Game();
 	virtual ~Game() = default;
 	bool initialize();
 	void runLoop();
 	void shutdown();
+private:
+	void processInput();
+	void updateGame();
+	void generateOutput();
 };

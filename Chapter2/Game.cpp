@@ -1,6 +1,12 @@
 #include "Game.h"
 #include <SDL/SDL_image.h>
 
+Game::Game()
+	: window(nullptr)
+	, renderer(nullptr)
+	, isRunning(true)
+{}
+
 bool Game::initialize() {
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
 		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
@@ -24,6 +30,35 @@ bool Game::initialize() {
 	return true;
 }
 
-void Game::runLoop() {}
+void Game::runLoop() {
+	while (isRunning) {
+		processInput();
+		updateGame();
+		generateOutput();
+	}
+}
 
-void Game::shutdown() {}
+void Game::shutdown() {
+	IMG_Quit();
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	SDL_Quit();
+}
+
+void Game::processInput() {
+	SDL_Event event;
+	while (SDL_PollEvent(&event)) {
+		switch (event.type) {
+		case SDL_QUIT:
+			isRunning = false;
+			break;
+		}
+	}
+	const Uint8* state = SDL_GetKeyboardState(nullptr);
+	if (state[SDL_SCANCODE_ESCAPE])
+		isRunning = false;
+}
+
+void Game::updateGame() {}
+
+void Game::generateOutput() {}
